@@ -7,7 +7,12 @@ struct Time
 	int hour = 0;
 	int minute = 0;
 	int second = 0;
-
+	enum Time_of_day{
+	morning, 
+	afternoon, 
+	evening, 
+	night,
+	};
 	
 	Time(int h, int m, int s){
 		hour = h;
@@ -73,6 +78,39 @@ struct Time
 		}
 		return out.str();
 	}
+
+
+
+	auto to_string(Time_of_day x) const ->std::string
+	{
+		switch(x){
+		case morning:
+		return "morning";
+		case afternoon:
+		return "afternoon";
+		case evening:
+		return "evening";
+		case night:
+		return "night";
+		default:
+			throw "Error";
+		};
+	}
+	auto time_of_day() const -> Time_of_day{
+		
+		if(hour >= 6 && hour <=11){
+			return morning;		
+		}
+		else if(hour >= 12 && hour <= 16){
+			return afternoon;		
+		}
+		else if(hour >= 17 && hour <= 20){
+			return evening;		
+		}
+		else{
+			return night;
+		}
+	}
 };
 
 
@@ -83,5 +121,6 @@ auto main()-> int
 	std::cout << t1.to_string()<<"\n";
 	t1.next_second();
 	std::cout << t1.to_string()<<"\n";
+	std::cout << t1.to_string(t1.time_of_day()) << "\n";
 
 }

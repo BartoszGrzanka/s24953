@@ -111,6 +111,106 @@ struct Time
 			return night;
 		}
 	}
+
+	auto operator + (Time const& o) const -> Time{
+		int h = hour;
+		int m = minute;
+		int s = second;
+		s += o.second;
+		if(s > 59){
+			s-=60;
+			m++;
+		}
+		m += o.minute;
+		if(m > 59){
+			m -=60;
+			h++;
+		}
+		h += o.hour;
+		if(h > 23){
+			h-=24;
+		}
+		return Time(h,m,s);
+	}
+
+	
+	auto operator- (Time const& o) const -> Time{
+		int h = hour;
+		int m = minute;
+		int s = second;
+		s -= o.second;
+		if(s < 0){
+			s+=60;
+			m--;
+		}
+		m -= o.minute;
+		if(m < 0){
+			m +=60;
+			h--;
+		}
+		h -= o.hour;
+		if(h < 0){
+			h +=24;
+		}
+		return Time(h,m,s);
+	}
+	auto operator< (Time const& o) const -> bool{
+		if(hour < o.hour){
+			return true;	
+		}
+		if(hour != o.hour){
+			return false;	
+		}
+		if(minute < o.minute){
+			return true;	
+		}
+		if(minute != o.minute){
+			return false;	
+		}
+		if(second < o.second){
+			return true;	
+		}
+		if(second != o.second){
+			return true;	
+		}
+		return false;
+	}
+	auto operator> (Time const& o) const -> bool{
+		if(hour > o.hour){
+			return true;	
+		}
+		if(hour != o.hour){
+			return false;	
+		}
+		if(minute > o.minute){
+			return true;	
+		}
+		if(minute != o.minute){
+			return false;	
+		}
+		if(second > o.second){
+			return true;	
+		}
+		if(second != o.second){
+			return false;	
+		}
+		return false;
+	}
+	auto operator== (Time const& o) const -> bool{
+		return (hour == o.hour && minute == o.minute && second == o.second);
+	}
+	auto operator!= (Time const& o) const -> bool{
+		return !(hour == o.hour && minute == o.minute && second == o.second);
+	}
+
+
+
+
+
+
+
+
+
 };
 
 
@@ -122,5 +222,11 @@ auto main()-> int
 	t1.next_second();
 	std::cout << t1.to_string()<<"\n";
 	std::cout << t1.to_string(t1.time_of_day()) << "\n";
+	auto x = t1 + Time(1, 30, 20);
+	auto y = x - Time(0,20,1);
+	auto z = x == y;
+	std::cout << x.to_string() << "\n";
+	std::cout << y.to_string() << "\n";
+	std::cout << z << "\n";
 
 }

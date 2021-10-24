@@ -13,7 +13,7 @@ struct Time
 	evening, 
 	night,
 	};
-	
+	Time() = default;
 	Time(int h, int m, int s){
 		hour = h;
 		minute = m;
@@ -74,7 +74,7 @@ struct Time
 		out << "0"<<second<<";";		
 		}
 		else{
-		out<<second<<":";		
+		out<<second;		
 		}
 		return out.str();
 	}
@@ -112,7 +112,7 @@ struct Time
 		}
 	}
 
-	auto operator + (Time const& o) const -> Time{
+	auto operator+ (Time const& o) const -> Time{
 		int h = hour;
 		int m = minute;
 		int s = second;
@@ -203,8 +203,33 @@ struct Time
 		return !(hour == o.hour && minute == o.minute && second == o.second);
 	}
 
-
-
+	auto count_seconds() const -> uint64_t{
+		std::uint64_t count = 0;
+		count += hour * 60 * 60;
+		count += minute * 60;
+		count += second;
+		return count;	
+	}
+	auto count_minutes() const -> uint64_t{
+		std::uint64_t count = 0;
+		count += hour * 60;
+		count += minute;
+		return count;	
+	}
+	auto time_to_midnight() const -> Time{
+		Time time;
+		if(second == 0){
+			time.second = second;
+			time.minute = 60 - minute;
+		}
+		else{
+			time.minute = 59- minute;
+			time.second = 60 - second;
+		}		
+			time.hour = 23 - hour;		
+	
+		return time;
+	}
 
 
 
@@ -219,7 +244,7 @@ auto main()-> int
 
 	auto t1 = Time(23,59,59);
 	std::cout << t1.to_string()<<"\n";
-	t1.next_second();
+	t1.next_minute();
 	std::cout << t1.to_string()<<"\n";
 	std::cout << t1.to_string(t1.time_of_day()) << "\n";
 	auto x = t1 + Time(1, 30, 20);
@@ -228,5 +253,8 @@ auto main()-> int
 	std::cout << x.to_string() << "\n";
 	std::cout << y.to_string() << "\n";
 	std::cout << z << "\n";
-
+	auto t2 = Time(22,12,33);
+	std::cout << "seconds: " << t2.count_seconds() << "\n";
+	std::cout << "minutes: " << t2.count_minutes() << "\n";
+	std::cout << "to midnight: " << t2.time_to_midnight().to_string() << "\n";
 }

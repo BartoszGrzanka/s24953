@@ -81,10 +81,7 @@ auto main()-> int
 
 	auto t1 = Time(23,59,59);
 	std::cout << t1.to_string()<<"\n";
-	int mili =1000;	
-	
-	while(true){
 	t1.next_second();
 	std::cout << t1.to_string()<<"\n";
-	}
+
 }
